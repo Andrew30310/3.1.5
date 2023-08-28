@@ -7,24 +7,24 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
+import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.validators.UserValidator;
 
 import java.util.List;
 
 @Controller
-public class MainController {
+public class AdminController {
 
     private final UserValidator userValidator;
     private final UserService userService;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
     @Autowired
-    public MainController(UserValidator userValidator, UserService userService, RoleRepository roleRepository) {
+    public AdminController(UserValidator userValidator, UserService userService, RoleService roleService) {
         this.userValidator = userValidator;
         this.userService = userService;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
     @GetMapping("/admin")
@@ -43,7 +43,7 @@ public class MainController {
     @GetMapping("/admin/new")
     public String createModel(@ModelAttribute("user") User user, ModelMap model) {
         model.addAttribute("user", user);
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = roleService.getListOfRoles();
         model.addAttribute("roles", roles);
         return "new";
     }
@@ -75,11 +75,5 @@ public class MainController {
     public String deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return "redirect:/admin";
-    }
-
-    @GetMapping("/user/{id}")
-    public String showUserToUser(@PathVariable("id") long id, ModelMap model) {
-        model.addAttribute("user", userService.getUser(id));
-        return "oneUserForUser";
     }
 }

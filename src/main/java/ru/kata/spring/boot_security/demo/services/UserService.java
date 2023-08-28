@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
     public User findByUsername(String username);
 
-    boolean updateUser(long oldUsersId, User newUser);
+    void updateUser(long oldUsersId, User newUser);
 
     User getUser(long id);
 

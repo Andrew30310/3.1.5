@@ -32,5 +32,6 @@ public class UserValidator implements Validator {
             return;
         }
         errors.rejectValue("username", "", "The username you have chosen is already taken");
+
     }
 }
