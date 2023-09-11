@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,9 +35,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getById(oldUsersId);
         if (user != null) {
             user.setUsername(newUser.getUsername());
-            user.setRealName(newUser.getRealName());
+            user.setFirstName(newUser.getFirstName());
             user.setAge(newUser.getAge());
             user.setPassword(newUser.getPassword());
+            user.setLastName(newUser.getLastName());
+            user.setRoles(newUser.getRoles());
             userRepository.saveAndFlush(user);
             return;
         }

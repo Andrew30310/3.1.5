@@ -8,7 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -22,8 +24,11 @@ public class User implements UserDetails {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "realName")
-    private String realName;
+    @Column(name = "firstName")
+    private String firstName;
+
+    @Column(name = "lastName")
+    private String lastName;
 
     @Column(name = "age")
     private int age;
@@ -40,13 +45,22 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String realName, int age, String password, Collection<Role> roles) {
+    public User(long id, String username, String firstName, String lastName, int age, String password, Collection<Role> roles) {
+        this.id = id;
         this.username = username;
-        this.realName = realName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.age = age;
         this.password = password;
         this.roles = roles;
+    }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public long getId() {
@@ -85,12 +99,12 @@ public class User implements UserDetails {
         this.username = name;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setRealName(String lastName) {
-        this.realName = lastName;
+    public void setFirstName(String lastName) {
+        this.firstName = lastName;
     }
 
     public int getAge() {
@@ -126,10 +140,12 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + username + '\'' +
-                ", realName='" + realName + '\'' +
+                ", username='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

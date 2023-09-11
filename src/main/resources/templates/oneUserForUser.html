@@ -1,26 +1,106 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>User</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>List of Users</title>
 </head>
-<body>
-<h3>ID:</h3>
-<p th:text="${user.getId()}">VALUE</p>
-<h3>Username:</h3>
-<p th:text="${user.getUsername()}">VALUE</p>
-<h3>Real name:</h3>
-<p th:text="${user.getRealName()}">VALUE</p>
-<h3>Age:</h3>
-<p th:text="${user.getAge()}">VALUE</p>
-<h3>Password:</h3>
-<p th:text="${user.getPassword()}">VALUE</p>
 
-<form>
-  <input type="button"
-         value="Logout"
-         onClick='location.href="/logout"'/>
-</form>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" style="color: white">
+                <div class="navbar-brand">
+                    <span class="font-weight-bold" th:text="${user.getUsername()} + ' '">Email</span>
+                    with roles:
+                    <span class="d-sm-inline-block">
+                <div sec:authorize="hasRole('ADMIN')">
+                <h5>ADMIN</h5>
+                </div>
+            </span>
+                    <span class="d-sm-inline-block">
+                <div sec:authorize="hasRole('USER')">
+                <h5>USER</h5>
+                </div>
+            </span>
+                </div>
+            </li>
+        </ul>
+        <span class="navbar-text">
+            <form th:method="POST" th:action="@{/logout}" style="outline: none !important">
+                <input type="submit" value="Logout" style="color: darkgrey; background: none; border: none">
+            </form>
+    </span>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row" style="height: 100vh">
+        <div class="col-2 pl-0 pr-0">
+            <br>
+            <nav class="nav flex-column nav-pills">
+                <div sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin}" class="nav-link" th:text="Admin">Admin</a>
+                </div>
+                <div sec:authorize="hasRole('USER')">
+                    <a th:href="@{/user/{id}(id=${user.getId()})}" class="nav-link active"
+                       th:text="User">User</a>
+                </div>
+            </nav>
+        </div>
+    <div class="col bg-light">
+        <br>
+      <h1>User information-page</h1>
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="usersTable">
+          <div class="card">
+            <div class="card-header">
+              <h4>About user</h4>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Age</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                </tr>
+                </thead>
+                  <tbody>
+                  <tr>
+                  <th th:text="${user.getId()}">id</th>
+                  <td><a th:text="${user.getFirstName()}">FirstName</a></td>
+                  <td><a th:text="${user.getLastName()}">LastName</a></td>
+                  <td><a th:text="${user.getAge()}">Age</a></td>
+                  <td><a th:text="${user.getUsername()}">Email</a></td>
+                  <td>
+                    <div th:each="role : ${user.getRoles()}">
+                      <a th:text="${role.getSimpleName()}">Roles</a>
+                    </div>
+                  </td>
+                  </tr>
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>

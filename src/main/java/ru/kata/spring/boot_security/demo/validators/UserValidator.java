@@ -31,7 +31,6 @@ public class UserValidator implements Validator {
             //пользователя с таким именем нет, всё ок
             return;
         }
-        errors.rejectValue("username", "", "The username you have chosen is already taken");
-
+        errors.rejectValue("username", "", "The email you have chosen is already taken");
     }
 }

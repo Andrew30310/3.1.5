@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.validators.UserValidator;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -28,8 +29,11 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public String showUsers(ModelMap model) {
+    public String showUsers(ModelMap model, Principal principal) {
+        List<Role> roles = roleService.getListOfRoles();
         model.addAttribute("users", userService.getUsersList());
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
+        model.addAttribute("roles", roles);
         return "allUsers";
     }
 
