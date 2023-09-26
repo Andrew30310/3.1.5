@@ -11,11 +11,11 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Set;
 
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
-    // Spring Security использует объект Authentication, пользователя авторизованной сессии.
     private final UserRepository userRepository;
 
     @Autowired
@@ -29,11 +29,7 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         if (roles.contains("ROLE_ADMIN")) {
             httpServletResponse.sendRedirect("/admin");
         } else if (roles.contains("ROLE_USER")) {
-            //идентификация пользователя
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            httpServletResponse.sendRedirect("/user/" + userRepository.findByUsername(userDetails.getUsername()).getId());
-        } else {
-            httpServletResponse.sendRedirect("/");
+            httpServletResponse.sendRedirect("/user");
         }
     }
 }

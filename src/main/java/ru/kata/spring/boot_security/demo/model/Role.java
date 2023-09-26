@@ -20,7 +20,8 @@ public class Role implements GrantedAuthority {
     public Role() {
     }
 
-    public Role(String name) {
+    public Role(long id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -39,15 +40,7 @@ public class Role implements GrantedAuthority {
     public void setName(String name) {
         this.name = name;
     }
-    public String getSimpleName() {
-        if (this.getName().contains("ADMIN")) {
-            return "ADMIN";
-        }
-        if (this.getName().contains("USER")) {
-            return "USER";
-        }
-        return "";
-    }
+
 
     @Override
     public String toString() {
@@ -59,6 +52,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return null;
+        return name;
     }
 }

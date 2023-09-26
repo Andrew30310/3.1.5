@@ -31,32 +31,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(long oldUsersId, User newUser) {
-        User user = userRepository.getById(oldUsersId);
-        if (user != null) {
-            user.setUsername(newUser.getUsername());
-            user.setFirstName(newUser.getFirstName());
-            user.setAge(newUser.getAge());
-            user.setPassword(newUser.getPassword());
-            user.setLastName(newUser.getLastName());
-            if (newUser.getRoles() != null){
-                user.setRoles(newUser.getRoles());
+    public void updateUser(User user) {
+        if (!userRepository.getOne(user.getId()).getPassword().equals(user.getPassword())) {
+            user.setPassword(user.getPassword());
+        }
+        User userById = getUser(user.getId());
+        if (userById != null) {
+            if (user.getRoles().isEmpty() || user.getRoles() == null) {
+                user.setRoles(userById.getRoles());
             }
             userRepository.saveAndFlush(user);
-            return;
         }
-
-        userRepository.saveAndFlush(newUser);
     }
+
 
     @Override
     public User getUser(long id) {
-        return userRepository.getById(id);
+        return userRepository.findById(id).get();
     }
 
     @Override
     public List<User> getUsersList() {
-        return userRepository.findAll();
+        return userRepository.findAllAndFetchRolesEagerly();
     }
 
     @Override
@@ -69,20 +65,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUser(long id) {
         userRepository.deleteById(id);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("User '%s' not found", username));
-        }
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
-    }
-
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
 
